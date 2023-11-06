@@ -1,6 +1,6 @@
 import socket
 import threading
-import time
+import logging as log
 from settings import *
 
 
@@ -11,26 +11,26 @@ class SocketServer(threading.Thread):
         self.server_socket = socket.socket()
         self.server_socket.bind((SERVER, PORT))
         self.server_socket.listen(ACCESSIBLE_CONNECTION)
+        log.info(f'Server starting with {SERVER} and port {PORT}')
 
     def run(self) -> None:
-        print(f'Server started')
+        log.info(f'Server started')
         self.running = True
         conn = None
         try:
             while self.running:
-                print(f'Waiting for new Connection...')
+                log.info(f'Waiting for new Connection...')
                 conn, address = self.server_socket.accept()  # accept new connection
-                print(f'Connected with: {address}')
+                log.info(f'Connected with: {address}')
                 t = threading.Thread(target=self.threaded_client, args=[conn])
                 t.start()
         except KeyboardInterrupt:
-            print("SDadas")
             if conn:
                 conn.close()
-            print("Searching for chat members failed! Is the system shutting down?")
+            log.exception("Keyboard exception error !!!")
 
     def stop(self):
-        print(f'Server stopped')
+        log.warning(f'Server stopped')
         self.running = False
 
     def threaded_client(self, conn):
@@ -65,14 +65,16 @@ class SocketServer(threading.Thread):
             except:
                 break
 
-        print("Connection Closed")
+        log.warning("Connection Closed")
         conn.close()
 
 
 
 
 server = SocketServer()
+
 server.start()
+
 # print("sadsa")
 # time.sleep(1)
 # print(f'Count of thred is {len(threading.enumerate())}')
