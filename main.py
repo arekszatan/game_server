@@ -1,6 +1,6 @@
 import logging as log
 from datetime import datetime
-import websocket_server
+from WebsocketServer import WebsocketServer
 
 
 if __name__ == "__main__":
@@ -9,4 +9,5 @@ if __name__ == "__main__":
                     format='%(asctime)s::%(levelname)s >>> %(message)s',
                     datefmt='%d-%b-%y %H:%M:%S')
     log.info('Starting main game_server...')
-    websocket_server.SocketServer()
+    server = WebsocketServer()
+    server.start()
