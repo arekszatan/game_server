@@ -1,8 +1,8 @@
 import socket
 import threading
 import logging as log
+from GameServer import GameServer
 from Settings import *
-from ThreadClient import ThreadClient
 
 
 class WebsocketServer(threading.Thread):
@@ -24,8 +24,8 @@ class WebsocketServer(threading.Thread):
                 log.info(f'Waiting for new Connection...')
                 conn, address = self.server_socket.accept()  # accept new connection
                 log.info(f'Connected with: {address}')
-                thread_client = ThreadClient(self, conn, address)
-                thread_client.start()
+                game = GameServer(self, conn, address)
+                game.start()
                 self.connected.append(address)
         except KeyboardInterrupt:
             if conn:
