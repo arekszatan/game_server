@@ -2,9 +2,6 @@ import threading
 import logging as log
 import json
 from Settings import *
-# from Game import Game
-
-# game = Game()
 all_socket_method = []
 
 

@@ -1,7 +1,7 @@
 import logging as log
 from datetime import datetime
 from WebsocketServer import WebsocketServer
-
+from game import Game
 
 if __name__ == "__main__":
     logName = datetime.today().strftime('%Y_%m_%d_logging.log')
@@ -11,3 +11,6 @@ if __name__ == "__main__":
     log.info('Starting main game_server...')
     server = WebsocketServer()
     server.start()
+
+
+
