@@ -41,7 +41,7 @@ class ThreadClientBase(threading.Thread):
 
         log.warning("Connection Closed")
         self.conn.close()
-        self.parent.on_thread_finished(self.address)
+        self.parent.on_thread_finished(self)
 
     def send_data(self, data, loging=True):
         if loging:
@@ -52,6 +52,7 @@ class ThreadClientBase(threading.Thread):
     def ping(self, message, prefix):
         message = {
             "prefix": prefix,
+            "callback_for_all": None,
             "data": message
         }
         self.send_data(json.dumps(message), loging=PING_LOG)
