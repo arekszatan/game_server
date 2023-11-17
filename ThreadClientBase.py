@@ -19,21 +19,21 @@ class ThreadClientBase(threading.Thread):
     def run(self) -> None:
         while True:
             try:
-                data = self.conn.recv(1024).decode()
-                json_object = json.loads(data)
-                prefix = json_object['prefix']
-                mess_method = json_object['method']
-                message = json_object['data']
-                if not data:
-                    self.send_data("Goodbye")
-                    break
-                else:
+                data_recv = self.conn.recv(1024).decode()
+                data_recv = data_recv.replace('}{', '},{')
+                data_recv = f'[{data_recv}]'
+                data_recv_json = json.loads(data_recv)
+                for json_object in data_recv_json:
+                    prefix = json_object['prefix']
+                    mess_method = json_object['method']
+                    message = json_object['data']
+                    print(json_object)
                     for method in all_socket_method:
                         if mess_method == method.__name__:
                             if method.__name__ == "ping" and not PING_LOG:
                                 method(self, message, prefix)
                             else:
-                                log.info(f'Get data {data} from {self.address}')
+                                log.info(f'Get data {json_object} from {self.address}')
                                 method(self, message, prefix)
             except Exception as e:
                 log.exception(e)
