@@ -20,6 +20,8 @@ class ThreadClientBase(threading.Thread):
         while True:
             try:
                 data_recv = self.conn.recv(1024).decode()
+                if data_recv == "":
+                    break
                 data_recv = data_recv.replace('}{', '},{')
                 data_recv = f'[{data_recv}]'
                 data_recv_json = json.loads(data_recv)
@@ -27,7 +29,6 @@ class ThreadClientBase(threading.Thread):
                     prefix = json_object['prefix']
                     mess_method = json_object['method']
                     message = json_object['data']
-                    print(json_object)
                     for method in all_socket_method:
                         if mess_method == method.__name__:
                             if method.__name__ == "ping" and not PING_LOG:
